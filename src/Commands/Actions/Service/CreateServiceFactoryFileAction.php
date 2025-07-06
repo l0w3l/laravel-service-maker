@@ -19,7 +19,7 @@ readonly class CreateServiceFactoryFileAction extends AbstractCreateFileAction
     {
         $classGenerator = new ClassGenerator($this->className, $this->namespace);
 
-        $classGenerator->setFunction("function get(): {$this->argumentName}ServiceInterface {\n{$classGenerator->spaces}return new {$this->argumentName}Service();\n}")
+        $classGenerator->setFunction("function get(array \$params = []): {$this->argumentName}ServiceInterface {\n{$classGenerator->spaces}return new {$this->argumentName}Service();\n}")
             ->setImplements(config('service-maker.services.map.factory'));
 
         $this->save($this->classPath, $classGenerator->generate());
