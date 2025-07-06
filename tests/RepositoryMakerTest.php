@@ -11,7 +11,7 @@ beforeEach(function () {
 it('service creation', function () {
     $test = 'Test';
 
-    Artisan::call("make:repository {$test}");
+    Artisan::call("lowel:make:repository {$test}");
 
     expect(app_path("Repositories/{$test}/{$test}RepositoryInterface.php"))->toBeFile()
         ->and(app_path("Repositories/{$test}/{$test}RepositoryFactory.php"))->toBeFile()

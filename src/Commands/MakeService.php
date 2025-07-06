@@ -19,7 +19,7 @@ class MakeService extends AbstractMakeFilesCommand
      *
      * @var string
      */
-    protected $signature = 'make:service {name}';
+    protected $signature = 'lowel:make:service {name : name of service} {--s|singleton : singleton option}';
 
     /**
      * The console command description.
@@ -31,8 +31,8 @@ class MakeService extends AbstractMakeFilesCommand
     public function getActions(string $argument): array
     {
         return [
+            new CreateServiceInterfaceFileAction(new ServiceInterfaceFileMetadata, $argument, $this->option('singleton')),
             new CreateServiceFileAction(new ServiceFileMetadata, $argument),
-            new CreateServiceInterfaceFileAction(new ServiceInterfaceFileMetadata, $argument),
             new CreateServiceFactoryFileAction(new ServiceFactoryFileMetadata, $argument),
         ];
     }

@@ -17,7 +17,7 @@ class MakeRepository extends AbstractMakeFilesCommand
      *
      * @var string
      */
-    protected $signature = 'make:repository {name}';
+    protected $signature = 'lowel:make:repository {name : name of repository} {--s|singleton : singleton option}';
 
     /**
      * The console command description.
@@ -29,7 +29,7 @@ class MakeRepository extends AbstractMakeFilesCommand
     public function getActions(string $argument): array
     {
         return [
-            new CreateRepositoryInterfaceFileAction(new RepositoryInterfaceFileMetadata, $argument, $this->hasArgument('-S')),
+            new CreateRepositoryInterfaceFileAction(new RepositoryInterfaceFileMetadata, $argument, $this->option('singleton')),
             new CreateRepositoryFileAction(new RepositoryFileMetadata, $argument),
             new CreateRepositoryFactoryFileAction(new RepositoryFactoryFileMetadata, $argument),
         ];
