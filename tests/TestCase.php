@@ -1,30 +1,25 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Lowel\LaravelServiceMaker\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Lowel\LaravelServiceMaker\LaravelServiceMakerProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
 
 class TestCase extends Orchestra
 {
     protected function setUp(): void
     {
         parent::setUp();
-
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
-            SkeletonServiceProvider::class,
+            LaravelServiceMakerProvider::class,
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
 

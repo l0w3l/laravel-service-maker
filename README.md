@@ -1,93 +1,123 @@
-# :package_description
+# Laravel Service/Repository Generator Package
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This Laravel package provides Artisan commands to quickly generate service and repository classes with their corresponding interfaces and factories following a standardized structure.
 
 ## Installation
 
-You can install the package via composer:
-
+1. Install the package via Composer:
 ```bash
-composer require :vendor_slug/:package_slug
+composer require lowel/laravel-service-maker
 ```
 
-You can publish and run the migrations with:
-
+2. The package will automatically register its service provider. If you need to publish the configuration file:
 ```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
+php artisan vendor:publish --provider="Lowel\\LaravelServiceMaker\\LaravelServiceMakerProvider" --tag="config"
 ```
 
-You can publish the config file with:
+## Commands
+
+### Create a new service
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-config"
+php artisan lowel:make:service {name} {--s|singleton}
 ```
 
-This is the contents of the published config file:
+**Options:**
+- `name`: The name of the service (e.g., `Payment` will create `PaymentService`)
+- `--s|singleton`: Create the service as a singleton
 
-```php
-return [
-];
+**Example:**
+```bash
+php artisan lowel:make:service Payment
 ```
 
-Optionally, you can publish the views using
+This will generate:
+- `App/Services/Payment/PaymentService.php`
+- `App/Services/Payment/PaymentServiceInterface.php`
+- `App/Services/Payment/PaymentServiceFactory.php`
+
+### Create a new repository
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-views"
+php artisan lowel:make:repository {name} {--s|singleton}
+```
+
+**Options:**
+- `name`: The name of the repository (e.g., `User` will create `UserRepository`)
+- `--s|singleton`: Create the repository as a singleton
+
+**Example:**
+```bash
+php artisan lowel:make:repository User --singleton
+```
+
+This will generate:
+- `App/Repositories/User/UserRepository.php`
+- `App/Repositories/User/UserRepositoryInterface.php`
+- `App/Repositories/User/UserRepositoryFactory.php`
+
+## File Structure
+
+The package follows this directory structure:
+
+```
+app/
+├── Repositories/
+│   ├── {RepositoryName}/
+│   │   ├── {RepositoryName}Repository.php
+│   │   ├── {RepositoryName}RepositoryInterface.php
+│   │   └── {RepositoryName}RepositoryFactory.php
+└── Services/
+    ├── {ServiceName}/
+    │   ├── {ServiceName}Service.php
+    │   ├── {ServiceName}ServiceInterface.php
+    │   └── {ServiceName}ServiceFactory.php
 ```
 
 ## Usage
 
+After generating the classes, you can use them through Laravel's dependency injection:
+
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+use App\Services\Payment\PaymentServiceInterface;
+use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Support\Facades\App;
+
+// Using app() helper
+$service = app(PaymentServiceInterface::class);
+$repository = app(UserRepositoryInterface::class);
+
+// Using App facade
+$service = App::make(PaymentServiceInterface::class);
+
+// Using constructor injection
+public function __construct(
+    PaymentServiceInterface $paymentService,
+    UserRepositoryInterface $userRepository
+) {
+    // ...
+}
 ```
 
-## Testing
+The package automatically registers the interfaces in Laravel's container, binding them to their concrete implementations.
+
+## Configuration
+
+You can customize the generation behavior by publishing and modifying the package configuration file:
 
 ```bash
-composer test
+php artisan vendor:publish --provider="Lowel\\LaravelServiceMaker\\LaravelServiceMakerProvider" --tag="config"
 ```
 
-## Changelog
+This will create `config/service-maker.php` where you can configure:
+- Base paths
+- Class mapping
+- Formatting
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
+## Requirements
+- PHP 8.3+
+- Laravel 9+
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+This package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

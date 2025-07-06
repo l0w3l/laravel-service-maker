@@ -1,24 +1,28 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "lowel/laravel-service-maker",
+    "description": "A package for Laravel 9+ that helps generate layered services according to the Interface-Service-Factory pattern using laravel's built-in DI.",
     "keywords": [
-        ":vendor_name",
+        "lowel",
         "laravel",
-        ":package_slug"
+        "laravel-service-maker",
+        "services",
+        "generator",
+        "make"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/l0w3l/laravel-service-maker",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Lowel",
+            "email": "10vvvvvv31@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.4",
-        "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0||^12.0"
+        "php": "^8.3",
+        "composer/class-map-generator": "*",
+        "illuminate/contracts": "^10.0||^11.0||^12.0",
+        "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
@@ -35,14 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Lowel\\LaravelServiceMaker\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Lowel\\LaravelServiceMaker\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -63,11 +65,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
-            }
+                "Lowel\\LaravelServiceMaker\\LaravelServiceMakerProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
