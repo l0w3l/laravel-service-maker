@@ -92,7 +92,7 @@ abstract class AbstractObjectGenerator implements ObjectGeneratorInterface
 
     public function setUse(string $className): static
     {
-        $this->setPart(ObjectPartsEnum::CLASSNAME, $className);
+        $this->setPart(ObjectPartsEnum::USE, $className);
 
         return $this;
     }
